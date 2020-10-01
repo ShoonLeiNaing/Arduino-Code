@@ -25,15 +25,25 @@ void loop()
 }
 
 void drawCartScreen(){
-  // Back Button
+  // Home Button
   myLCD.setColor(VGA_SILVER);
-  myLCD.fillRoundRect(10,10,80,36);
+  myLCD.fillRoundRect(12,10,86,36);
   myLCD.setColor(255,255,255);
-  myLCD.fillRoundRect(10,10,90,36);
+  myLCD.fillRoundRect(12,10,86,36);
   myLCD.setFont(arial_bold);
   myLCD.setBackColor(VGA_AQUA);
   myLCD.setColor(VGA_BLACK);
   myLCD.print("Home",18,15);
+
+   // Check out Button
+  myLCD.setColor(VGA_SILVER);
+  myLCD.fillRoundRect(240,10,298,36);
+  myLCD.setColor(255,255,255);
+  myLCD.fillRoundRect(240,10,298,36);
+  myLCD.setFont(arial_bold);
+  myLCD.setBackColor(VGA_AQUA);
+  myLCD.setColor(VGA_BLACK);
+  myLCD.print("Pay",245,15);
 
   // Titles
   myLCD.setBackColor(VGA_BLACK);

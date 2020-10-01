@@ -59,8 +59,4 @@ void drawHomeScreen(){
   myLCD.setFont(SmallFont);
   myLCD.setColor(VGA_BLACK);
   myLCD.print("Sponsored by Ye Ye Wal",RIGHT,185);
-  
-  
-  
-
 }
