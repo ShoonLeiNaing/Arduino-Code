@@ -74,6 +74,5 @@ void drawCartScreen(){
   myLCD.drawLine(0,190,319,190);
   myLCD.print("Total",CENTER,195);
   myLCD.print("5100ks",RIGHT,195);
-  
-
+ 
 }

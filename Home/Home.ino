@@ -1,6 +1,7 @@
 
 
 #include <UTFT.h>
+#include <UTouch.h>
 
 
 
@@ -10,19 +11,36 @@ extern uint8_t Ubuntu[];
 extern uint8_t arial_bold[];
 
 UTFT    myLCD(ITDB28,A5,A4,A3,A2);
+UTouch myTouch(A1,8,A0,9,2);
+char currentPage='0';
 
 void setup()
 {
   myLCD.InitLCD();
   myLCD.setFont(SmallFont);
   drawHomeScreen();
- 
+  myTouch.InitTouch();
+  myTouch.setPrecision(PREC_MEDIUM);
+  drawHomeScreen();
+  Serial.begin(9600);
+   
 }
 
 void loop()
-{
+{ 
+   
+  long x, y;
+   if(currentPage=='0'){
+    if(myTouch.dataAvailable()){
+      myTouch.read();
+      x=myTouch.getX();
+      y=myTouch.getY();
+      Serial.println(x);
+      Serial.println(y);
+      delay(2000);
   
-  
+     }
+  }
 }
 
 void drawHomeScreen(){
