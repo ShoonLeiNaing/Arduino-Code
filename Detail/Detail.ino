@@ -20,10 +20,11 @@ void setup()
 {
   myLCD.InitLCD();
   myLCD.setFont(SmallFont);
+  myLCD.clrScr();
   myTouch.InitTouch();
   myTouch.setPrecision(PREC_MEDIUM);
   drawDetailScreen(price,amount);
-  Serial.begin(9600);
+  
 }
 
 
@@ -35,27 +36,27 @@ void loop()
       myTouch.read();
       x=myTouch.getX();
       y=myTouch.getY();
-      Serial.println(x);
-      Serial.println(y);
-      delay(1000);
 
-    if((x>=60)&&(x<=90)&&(y>=180)&&(y<=210)){
-        Serial.println("Hello");
+    if((x>=60)&&(x<=90)&&(y>=175)&&(y<=210)){
+       
         amount=amount+1;
-        Serial.println(amount);
         newprice=price*amount;
-        Serial.println(newprice);
         myLCD.clrScr();
         drawDetailScreen(newprice,amount);
-        Serial.println("Hi");
-        
-       }   
+    }
+
+    if((x>=240)&&(x<=260)&&(y>=175)&&(y<=210)){
+       
+        amount=amount-1;
+        newprice=price*amount;
+        myLCD.clrScr();
+        drawDetailScreen(newprice,amount);
+     } 
    }
 }
 
 void drawDetailScreen(int price,int amount){
   // Back Button
-  
   myLCD.setColor(VGA_SILVER);
   myLCD.fillRoundRect(10,10,83,36);
   myLCD.setColor(255,255,255);
@@ -65,7 +66,18 @@ void drawDetailScreen(int price,int amount){
   myLCD.setColor(VGA_BLACK);
   myLCD.print("Home",15,15);
 
+   // Cart Button
+  myLCD.setColor(VGA_SILVER);
+  myLCD.fillRoundRect(240,10,313,36);
+  myLCD.setColor(255,255,255);
+  myLCD.fillRoundRect(240,10,313,36);
+  myLCD.setFont(arial_bold);
+  myLCD.setBackColor(VGA_AQUA);
+  myLCD.setColor(VGA_BLACK);
+  myLCD.print("CART",245,15);
 
+  
+ //Description
   myLCD.setFont(Ubuntu);
   myLCD.setBackColor(VGA_BLACK);
   myLCD.setColor(VGA_AQUA);
@@ -76,7 +88,8 @@ void drawDetailScreen(int price,int amount){
   
   myLCD.setColor(VGA_AQUA);
   myLCD.drawLine(0,135,319,135);
-  
+
+  //price
   myLCD.setFont(Ubuntu);
   myLCD.setBackColor(VGA_AQUA);
   myLCD.setColor(VGA_BLACK);
@@ -100,6 +113,7 @@ void drawDetailScreen(int price,int amount){
   myLCD.setColor(VGA_AQUA);
   myLCD.print("+",233,190);
 
+  //amount
   myLCD.setColor(VGA_BLACK);
   myLCD.setBackColor(VGA_AQUA);
   mystr=String(amount);

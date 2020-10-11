@@ -54,8 +54,7 @@ void loop()
               myLCD.clrScr();
               drawThankYouScreen();
           }   
-          if((x>=20
-          0)&&(x<=265)&&(y>=30)&&(y<=70)){
+          if((x>=200)&&(x<=265)&&(y>=30)&&(y<=70)){
                currentPage='0';
                myLCD.clrScr();
                drawHomeScreen();
