@@ -1,7 +1,5 @@
-
-
 #include <UTFT.h>
-
+#define ARRAY_SIZE(x) sizeof(x)/sizeof(x[0])
 
 
 extern uint8_t SmallFont[];
@@ -10,7 +8,10 @@ extern uint8_t Ubuntu[];
 extern uint8_t arial_bold[];
 
 UTFT    myLCD(ITDB28,A5,A4,A3,A2);
-
+String items[]={"Eggs","Soap","Bread","Book"};
+int quantity[]={2,1,3,4};
+int price[]={400,500,3000,1200};
+int total;
 void setup()
 {
   myLCD.InitLCD();
@@ -53,26 +54,26 @@ void drawCartScreen(){
   myLCD.print("Qty",CENTER,60);
   myLCD.print("Total",RIGHT,60);
   myLCD.drawLine(0,85,319,85);
-  
-  // Dummy Data
-  myLCD.print("Eggs",LEFT,95);
-  myLCD.print("x2",CENTER,95);
-  myLCD.print("400ks",RIGHT,95);
 
-  myLCD.print("Soap",LEFT,115);
-  myLCD.print("x1",CENTER,115);
-  myLCD.print("500ks",RIGHT,115);
+  int x=95;
+  for(int i=0;i<ARRAY_SIZE(items);i++)
+  { 
 
-  myLCD.print("Bread",LEFT,135);
-  myLCD.print("x3",CENTER,135);
-  myLCD.print("3000ks",RIGHT,135);
+    myLCD.print(items[i],LEFT,x);
+    myLCD.print(String(quantity[i]),CENTER,x);
+    myLCD.print(String(price[i]),RIGHT,x);
+    x=x+20;
+  }
 
-  myLCD.print("Book",LEFT,155);
-  myLCD.print("x4",CENTER,155);
-  myLCD.print("1200ks",RIGHT,155);
+  for(int j=0;j<ARRAY_SIZE(price);j++)
+  {
+    total=total+price[j];
+  }
 
-  myLCD.drawLine(0,190,319,190);
-  myLCD.print("Total",CENTER,195);
-  myLCD.print("5100ks",RIGHT,195);
- 
+  x=x+35;
+  myLCD.drawLine(0,x,319,x);
+  String mystr=String(total);
+  myLCD.print("Total",CENTER,x+5);
+  myLCD.print(mystr+"ks",RIGHT,x+5);
+
 }
