@@ -11,12 +11,14 @@ UTFT    myLCD(ITDB28,A5,A4,A3,A2);
 String items[]={"Eggs","Soap","Bread","Book"};
 int quantity[]={2,1,3,4};
 int price[]={400,500,3000,1200};
+int arraySize=ARRAY_SIZE(items);
 int total;
 void setup()
 {
   myLCD.InitLCD();
   myLCD.setFont(SmallFont);
-  drawCartScreen();
+  
+  drawCartScreen(items,arraySize);
 }
 
 void loop()
@@ -25,7 +27,7 @@ void loop()
   
 }
 
-void drawCartScreen(){
+void drawCartScreen(String items[],int arraySize){
   // Home Button
   myLCD.setColor(VGA_SILVER);
   myLCD.fillRoundRect(12,10,86,36);

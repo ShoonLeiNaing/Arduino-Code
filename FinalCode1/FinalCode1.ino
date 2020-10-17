@@ -2,6 +2,11 @@
 
 #include <UTFT.h>
 #include <UTouch.h>
+#include <SPI.h>
+#include <MFRC522.h>
+
+#define SS_PIN 53 //D2
+#define RST_PIN 49 //D1
 #define ARRAY_SIZE(x) sizeof(x)/sizeof(x[0])
 
 extern uint8_t SmallFont[];
@@ -11,19 +16,26 @@ extern uint8_t arial_bold[];
 
 UTFT    myLCD(ITDB28, A5, A4, A3, A2);
 UTouch  myTouch(A1,8,A0,9,2);
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
+int statuss = 0;
+int out = 0;
+int led = 46;                                    // LED connected to pin 13
+int sound = 47;
+int card_status1=0, card_status2=0, card_status3=0, card_status4=0, card_status5=0;
+
 
 char currentPage='0';
-
 String items[]={"Eggs","Soap","Bread","Book"};
 int quantity[]={2,1,3,4};
 int price[]={400,500,3000,1200};
+String description1;
+String description2;
 int total;
-
-int productPrice=200;
 int newprice;
-int amount = 1;
-String itemName="Banana";
-
+int productPrice;
+String itemName;
+int amount;
+int card;
 
 void setup()
 { 
@@ -33,13 +45,55 @@ void setup()
   myTouch.InitTouch();
   myTouch.setPrecision(PREC_MEDIUM);
   drawHomeScreen();
+  SPI.begin();      // Initiate  SPI bus
+  mfrc522.PCD_Init();   // Initiate MFRC522
 
   
 }
 
 void loop()
 { 
-   
+    if ( mfrc522.PICC_IsNewCardPresent()) 
+  {
+      if (  mfrc522.PICC_ReadCardSerial()) 
+      {
+          String content= "";
+          byte letter;
+          for (byte i = 0; i < mfrc522.uid.size; i++) 
+          {
+             content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+             content.concat(String(mfrc522.uid.uidByte[i], HEX));
+         
+          }
+          content.toUpperCase();
+          
+          if (content.substring(1) == "77 0C 0B 4F") 
+          {   
+              currentPage='3';
+              itemName="Banana";
+              productPrice=200;
+              amount=1;
+              description1="Thee Mhway, contains";
+              description2="vitamins B12 and B6";
+              myLCD.clrScr();
+              card=1;
+              drawDetailScreen(itemName,productPrice,amount);      
+          }
+          if (content.substring(1) == "77 E4 14 4E") 
+          {   
+              currentPage='3';
+              itemName="NesCafe";
+              productPrice=3000;
+              amount=1;
+              description1="Finely Ground Roasted";
+              description2="Coffee Mix Powder";
+              myLCD.clrScr();
+              card=2;
+              drawDetailScreen(itemName,productPrice,amount);      
+          }
+          
+      }
+  }
   long x, y;
   //Welcome
    if(currentPage=='0'){
@@ -58,6 +112,7 @@ void loop()
    }
    //Cart
    if(currentPage=='1'){
+    
        if(myTouch.dataAvailable()){
           myTouch.read();
           x=myTouch.getX();
@@ -74,43 +129,43 @@ void loop()
            }  
          }
     }
-    
-    //Detail 
-    if(currentPage=='3'){
-      long x, y;
-  
-      if(myTouch.dataAvailable()){
-          myTouch.read();
-          x=myTouch.getX();
-          y=myTouch.getY();
-    
-        if((x>=60)&&(x<=90)&&(y>=175)&&(y<=210)){
-           
-            amount=amount+1;
-            newprice=productPrice*amount;
-            myLCD.clrScr();
-            drawDetailScreen(newprice,amount);
+     if(currentPage=='3'){
+           long x, y;
+                  
+           if(myTouch.dataAvailable()){
+           myTouch.read();
+           x=myTouch.getX();
+           y=myTouch.getY();
+                    
+           if((x>=60)&&(x<=90)&&(y>=175)&&(y<=210)){
+                           
+               amount=amount+1;
+               newprice=productPrice*amount;
+               myLCD.clrScr();
+               drawDetailScreen(itemName,newprice,amount);
+             }
+                    
+             if((x>=240)&&(x<=260)&&(y>=175)&&(y<=210)){
+                           
+                amount=amount-1;
+                newprice=productPrice*amount;
+                myLCD.clrScr();
+                drawDetailScreen(itemName,newprice,amount);
+             } 
+             
+             if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
+                return;
+//                int count=ARRAY_SIZE(items)+1;
+//                items[count]=itemName;
+//                price[count]=newprice;
+//                quantity[count]=amount;
+//                myLCD.clrScr();
+//                drawCartScreen();   
+             }
+           }
         }
     
-        if((x>=240)&&(x<=260)&&(y>=175)&&(y<=210)){
-           
-            amount=amount-1;
-            newprice=productPrice*amount;
-            myLCD.clrScr();
-            drawDetailScreen(newprice,amount);
-         } 
-        if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
-
-          int count=ARRAY_SIZE(items)+1;
-          items[count]=itemName;
-          price[count]=newprice;
-          quantity[count]=amount;
-          myLCD.clrScr();
-          drawCartScreen();
-        
-          }
-       }
-     }
+    
       
 }
 void drawHomeScreen(){
@@ -223,7 +278,7 @@ void drawCartScreen(){
 
 }
 
-void drawDetailScreen(int productPrice,int amount){
+void drawDetailScreen(String itemName,int productPrice,int amount){
   String mystr,mystr2;
   // Back Button
   myLCD.setColor(VGA_SILVER);
@@ -237,9 +292,9 @@ void drawDetailScreen(int productPrice,int amount){
 
    // Cart Button
   myLCD.setColor(VGA_SILVER);
-  myLCD.fillRoundRect(240,10,313,36);
+  myLCD.fillRoundRect(240,10,298,36);
   myLCD.setColor(255,255,255);
-  myLCD.fillRoundRect(240,10,313,36);
+  myLCD.fillRoundRect(240,10,298,36);
   myLCD.setFont(arial_bold);
   myLCD.setBackColor(VGA_AQUA);
   myLCD.setColor(VGA_BLACK);
@@ -252,8 +307,8 @@ void drawDetailScreen(int productPrice,int amount){
   myLCD.setColor(VGA_AQUA);
   myLCD.print(itemName,CENTER,50);
   myLCD.setFont(arial_bold);
-  myLCD.print("Thee Mhway,contains" ,CENTER,90);
-  myLCD.print("vitamins B12 and B6",CENTER,108);
+  myLCD.print(description1 ,CENTER,90);
+  myLCD.print(description2 ,CENTER,108);
   
   myLCD.setColor(VGA_AQUA);
   myLCD.drawLine(0,135,319,135);

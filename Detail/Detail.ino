@@ -13,7 +13,7 @@ String items[]={"Eggs","Soap","Bread"};
 int quantity[]={2,1,3,4};
 int price[]={400,500,3000};
 int total;
-
+char currentPage='0';
 int productPrice=200;
 int newprice;
 int amount = 1;
@@ -32,42 +32,43 @@ void setup()
 
 
 void loop()
-{
+{ 
   long x, y;
-  
-  if(myTouch.dataAvailable()){
-      myTouch.read();
-      x=myTouch.getX();
-      y=myTouch.getY();
+  if(currentPage=='0'){  
+      if(myTouch.dataAvailable()){
+          myTouch.read();
+          x=myTouch.getX();
+          y=myTouch.getY();
+    
+        if((x>=60)&&(x<=90)&&(y>=175)&&(y<=210)){
+           
+            amount=amount+1;
+            newprice=productPrice*amount;
+            myLCD.clrScr();
+            drawDetailScreen(newprice,amount);
+        }
+    
+        if((x>=240)&&(x<=260)&&(y>=175)&&(y<=210)){
+           
+            amount=amount-1;
+            newprice=productPrice*amount;
+            myLCD.clrScr();
+            drawDetailScreen(newprice,amount);
+         } 
+        if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
 
-    if((x>=60)&&(x<=90)&&(y>=175)&&(y<=210)){
-       
-        amount=amount+1;
-        newprice=productPrice*amount;
-        myLCD.clrScr();
-        drawDetailScreen(newprice,amount);
+            currentPage='1';
+            int count=ARRAY_SIZE(items);
+            items[count]=itemName;
+            price[count]=newprice;
+            quantity[count]=amount;
+            myLCD.clrScr();
+            drawCartScreen();
+            
+         }
+       }
     }
-
-    if((x>=240)&&(x<=260)&&(y>=175)&&(y<=210)){
-       
-        amount=amount-1;
-        newprice=productPrice*amount;
-        myLCD.clrScr();
-        drawDetailScreen(newprice,amount);
-     } 
-    if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
-
-        int count=ARRAY_SIZE(items)+1;
-        items[count]=itemName;
-        price[count]=newprice;
-        quantity[count]=amount;
-        myLCD.clrScr();
-        drawCartScreen();
-        
-     }
-   }
 }
-
 void drawDetailScreen(int productPrice,int amount){
   // Back Button
   myLCD.setColor(VGA_SILVER);
