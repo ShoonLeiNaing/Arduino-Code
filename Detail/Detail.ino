@@ -10,8 +10,9 @@ extern uint8_t arial_bold[];
 UTFT    myLCD(ITDB28,A5,A4,A3,A2);
 URTouch  myTouch(A1,8,A0,9,2);
 String items[]={"Eggs","Soap","Bread"};
-int quantity[]={2,1,3,4};
+int quantity[]={2,1,3};
 int price[]={400,500,3000};
+
 int total;
 char currentPage='0';
 int productPrice=200;
@@ -26,7 +27,7 @@ void setup()
   myLCD.clrScr();
   myTouch.InitTouch();
   myTouch.setPrecision(PREC_MEDIUM);
-  drawDetailScreen(productPrice,amount);
+  drawDetailScreen(itemName,productPrice,amount);
   
 }
 
@@ -45,7 +46,7 @@ void loop()
             amount=amount+1;
             newprice=productPrice*amount;
             myLCD.clrScr();
-            drawDetailScreen(newprice,amount);
+            drawDetailScreen(itemName,newprice,amount);
         }
     
         if((x>=240)&&(x<=260)&&(y>=175)&&(y<=210)){
@@ -53,7 +54,7 @@ void loop()
             amount=amount-1;
             newprice=productPrice*amount;
             myLCD.clrScr();
-            drawDetailScreen(newprice,amount);
+            drawDetailScreen(itemName,newprice,amount);
          } 
         if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
 
@@ -63,13 +64,13 @@ void loop()
             price[count]=newprice;
             quantity[count]=amount;
             myLCD.clrScr();
-            drawCartScreen();
+            drawCartScreen(items,quantity,price,count);
             
          }
        }
     }
 }
-void drawDetailScreen(int productPrice,int amount){
+void drawDetailScreen(String itemName,int newPrice,int amount){
   // Back Button
   myLCD.setColor(VGA_SILVER);
   myLCD.fillRoundRect(10,10,83,36);
@@ -108,7 +109,7 @@ void drawDetailScreen(int productPrice,int amount){
   myLCD.setBackColor(VGA_AQUA);
   myLCD.setColor(VGA_BLACK);
   myLCD.setFont(arial_bold);
-  mystr2=String(productPrice);
+  mystr2=String(newPrice);
   myLCD.print(mystr2+" ks",CENTER,150);
 
 
@@ -136,7 +137,7 @@ void drawDetailScreen(int productPrice,int amount){
 
 }
 
-void drawCartScreen(){
+void drawCartScreen(String items[],int quantity[],int price[],int count){
   // Home Button
   myLCD.setColor(VGA_SILVER);
   myLCD.fillRoundRect(12,10,86,36);
@@ -167,7 +168,7 @@ void drawCartScreen(){
   myLCD.drawLine(0,85,319,85);
 
   int x=95;
-  for(int i=0;i<ARRAY_SIZE(items);i++)
+  for(int i=1;i<=count;i++)
   { 
 
     myLCD.print(items[i],LEFT,x);
@@ -176,7 +177,7 @@ void drawCartScreen(){
     x=x+20;
   }
 
-  for(int j=0;j<ARRAY_SIZE(price);j++)
+  for(int j=1;j<=count;j++)
   {
     total=total+price[j];
   }
