@@ -26,20 +26,19 @@ int sound = 47;
 
 
 char currentPage='0';
-
-String items[]={"Bread","Milk","Egg"};
-int quantity[]={2,1,3};
-int price[]={1000,2500,500};
+String items[5];
+int quantity[5];
+int price[5];
 String description1;
 String description2;
-int total;
+int total=0;
 int newprice;
 int productPrice;
 String itemName;
 int amount=1;
 int paySize;
 int arraySize;
-int count;
+int count=0;
 
 void setup()
 { 
@@ -111,8 +110,8 @@ void loop()
       if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
         currentPage='1';
         myLCD.clrScr();
-        arraySize=ARRAY_SIZE(items);
-        drawCartScreen(items,quantity,price,arraySize);  
+//        arraySize=ARRAY_SIZE(items);
+//        drawCartScreen(items,quantity,price,arraySize);  
      }
     }
    }
@@ -127,8 +126,7 @@ void loop()
               currentPage='2';
               myLCD.clrScr();
               drawThankYouScreen();
-              paySize=ARRAY_SIZE(items);
-              for(int a=0;a<=paySize;a++){
+              for(int a=0;a<=count;a++){
                  String data=items[a]+"  "+String(quantity[a])+"   "+String(price[a]);
                  Arduino.print(data);
                  Arduino.println("\n");
@@ -184,14 +182,14 @@ void loop()
                 if(amount==1){
                   newprice=productPrice;
                 }
-                count=ARRAY_SIZE(items);
+                
                 items[count]=itemName;
                 price[count]=newprice;
                 quantity[count]=amount;
-                arraySize=ARRAY_SIZE(items);
                 currentPage='1';
                 myLCD.clrScr();
-                drawCartScreen(items,quantity,price,arraySize);   
+                drawCartScreen(items,quantity,price,count); 
+                count=count+1;  
              }
            }
         }
@@ -257,7 +255,7 @@ void drawThankYouScreen()
   myLCD.print("Sponsored by Ye Ye Wal",RIGHT,185);
 }
 
-void drawCartScreen(String items[],int quantity[],int price[],int arraySize){
+void drawCartScreen(String items[],int quantity[],int price[],int count){
   // Home Button
   myLCD.clrScr();
   myLCD.setColor(VGA_SILVER);
@@ -289,7 +287,7 @@ void drawCartScreen(String items[],int quantity[],int price[],int arraySize){
   myLCD.drawLine(0,85,319,85);
   int xcoordinate=95;
  
-  for(int i=0;i<arraySize;i++)
+  for(int i=0;i<=count;i++)
   { 
     myLCD.print(items[i],LEFT,xcoordinate);
     myLCD.print(String(quantity[i]),CENTER,xcoordinate);
@@ -297,16 +295,17 @@ void drawCartScreen(String items[],int quantity[],int price[],int arraySize){
     xcoordinate=xcoordinate+20;
   }
   
-  for(int j=0;j<arraySize;j++)
-  {
-    total=total+price[j];
-  }
-
+//  for(int j=0;j<=count;j++)
+//  {
+//    total=+price[j];
+//  }
+  total=total+price[count];
   xcoordinate=xcoordinate+35;
   myLCD.drawLine(0,xcoordinate,319,xcoordinate);
   String mystr=String(total);
   myLCD.print("Total",CENTER,xcoordinate+5);
   myLCD.print(mystr+"ks",RIGHT,xcoordinate+5);
+  count=count+1;
 
 }
 
