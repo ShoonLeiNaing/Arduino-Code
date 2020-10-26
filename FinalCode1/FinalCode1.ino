@@ -29,6 +29,8 @@ char currentPage='0';
 String items[5];
 int quantity[5];
 int price[5];
+String itemID[5];
+String id;
 String description1;
 String description2;
 int total=0;
@@ -39,6 +41,7 @@ int amount=1;
 int paySize;
 int arraySize;
 int count=0;
+String DeviceID="1";
 
 void setup()
 { 
@@ -77,6 +80,7 @@ void loop()
           {   
               currentPage='3';
               itemName="Banana";
+              id="01";
               productPrice=200;
               amount=1;
               description1="Thee Mhway, contains";
@@ -88,6 +92,7 @@ void loop()
           {   
               currentPage='3';
               itemName="NesCafe";
+              id="02";
               productPrice=3000;
               amount=1;
               description1="Finely Ground Roasted";
@@ -107,12 +112,12 @@ void loop()
       y=myTouch.getY();
   
 
-      if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
-        currentPage='1';
-        myLCD.clrScr();
-//        arraySize=ARRAY_SIZE(items);
-//        drawCartScreen(items,quantity,price,arraySize);  
-     }
+//      if((x>=0)&&(x<=40)&&(y>=0)&&(y<=80)){
+//        currentPage='1';
+//        myLCD.clrScr();
+//       arraySize=ARRAY_SIZE(items);
+//      drawCartScreen(items,quantity,price,arraySize);  
+//     }
     }
    }
    //Cart
@@ -126,25 +131,12 @@ void loop()
               currentPage='2';
               myLCD.clrScr();
               drawThankYouScreen();
-              for(int a=0;a<=count;a++){
-                 String data=items[a]+"  "+String(quantity[a])+"   "+String(price[a]);
-                 Arduino.print(data);
-                 Arduino.println("\n");
-                 delay(2000);
-              }
-
-              
-//              for(int b=0;b<=paySize;b++){
-//                 Arduino.print(price[b]);
+//              for(int a=0;a<=count;a++){
+//                 String data=DeviceID+" "+itemID[a]+" "+String(quantity[a])+" "+String(price[a]);
+//                 Arduino.print(data);
 //                 Arduino.println("\n");
 //                 delay(2000);
-//              }   
-//              for(int c=0;c<=paySize;c++){
-//                 Arduino.print(items[c]);
-//                 Arduino.println("\n");
-//                 delay(2000);
-//              }   
-              
+//              }              
           }   
           if((x>=200)&&(x<=265)&&(y>=30)&&(y<=70)){
                currentPage='0';
@@ -186,9 +178,14 @@ void loop()
                 items[count]=itemName;
                 price[count]=newprice;
                 quantity[count]=amount;
+                itemID[count]=id;
                 currentPage='1';
                 myLCD.clrScr();
-                drawCartScreen(items,quantity,price,count); 
+                drawCartScreen(items,quantity,price,count);
+                String data=DeviceID+" "+id+" "+String(amount)+" "+String(newprice);
+                Arduino.print(data);
+                Arduino.println("\n");
+                delay(2000); 
                 count=count+1;  
              }
            }
@@ -209,14 +206,14 @@ void drawHomeScreen(){
   myLCD.print("BACK",15,15);
 
 //  Cart Button
-  myLCD.setColor(VGA_SILVER);
-  myLCD.fillRoundRect(240,10,313,36);
-  myLCD.setColor(255,255,255);
-  myLCD.fillRoundRect(240,10,313,36);
-  myLCD.setFont(arial_bold);
-  myLCD.setBackColor(VGA_AQUA);
-  myLCD.setColor(VGA_BLACK);
-  myLCD.print("CART",245,15);
+//  myLCD.setColor(VGA_SILVER);
+//  myLCD.fillRoundRect(240,10,313,36);
+//  myLCD.setColor(255,255,255);
+//  myLCD.fillRoundRect(240,10,313,36);
+//  myLCD.setFont(arial_bold);
+//  myLCD.setBackColor(VGA_AQUA);
+//  myLCD.setColor(VGA_BLACK);
+//  myLCD.print("CART",245,15);
   
   myLCD.setBackColor(0,0,0); //Background Color
   myLCD.setColor(255,255,255); //Text Color
