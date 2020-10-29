@@ -80,7 +80,7 @@ void loop()
           {   
               currentPage='3';
               itemName="Banana";
-              id="01";
+              id="1";
               productPrice=200;
               amount=1;
               description1="Thee Mhway, contains";
@@ -92,7 +92,7 @@ void loop()
           {   
               currentPage='3';
               itemName="NesCafe";
-              id="02";
+              id="16";
               productPrice=3000;
               amount=1;
               description1="Finely Ground Roasted";
@@ -136,7 +136,7 @@ void loop()
 //                 Arduino.print(data);
 //                 Arduino.println("\n");
 //                 delay(2000);
-//              }              
+////              }              
           }   
           if((x>=200)&&(x<=265)&&(y>=30)&&(y<=70)){
                currentPage='0';
