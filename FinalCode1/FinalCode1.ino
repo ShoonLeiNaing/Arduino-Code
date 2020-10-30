@@ -76,15 +76,15 @@ void loop()
           }
           content.toUpperCase();
           
-          if (content.substring(1) == "77 0C 0B 4F") 
+          if (content.substring(1) == "04 AC 53 63") 
           {   
               currentPage='3';
-              itemName="Banana";
-              id="1";
-              productPrice=200;
+              itemName="Bread";
+              id="17";
+              productPrice=1000;
               amount=1;
-              description1="Thee Mhway, contains";
-              description2="vitamins B12 and B6";
+              description1="enriched with important";
+              description2="vitamins and minerals";
               myLCD.clrScr();
               drawDetailScreen(itemName,productPrice,amount);      
           }
@@ -97,6 +97,42 @@ void loop()
               amount=1;
               description1="Finely Ground Roasted";
               description2="Coffee Mix Powder";
+              myLCD.clrScr();
+              drawDetailScreen(itemName,productPrice,amount);      
+          }
+          if (content.substring(1) == "5D 96 53 63") 
+          {   
+              currentPage='3';
+              itemName="Yum Yum";
+              id="18";
+              productPrice=250;
+              amount=1;
+              description1="Instant noodle with";
+              description2="wheat flour,palm oil,salt";
+              myLCD.clrScr();
+              drawDetailScreen(itemName,productPrice,amount);      
+          }
+          if (content.substring(1) == "35 48 53 63") 
+          {   
+              currentPage='3';
+              itemName="Water";
+              id="19";
+              productPrice=300;
+              amount=1;
+              description1="Alpine Water";
+              description2="aids in digestion";
+              myLCD.clrScr();
+              drawDetailScreen(itemName,productPrice,amount);      
+          }
+          if (content.substring(1) == "0B BB 53 63") 
+          {   
+              currentPage='3';
+              itemName="Gum";
+              id="20";
+              productPrice=200;
+              amount=1;
+              description1="Clorets chewing gum";
+              description2="keep your teeth healthy";
               myLCD.clrScr();
               drawDetailScreen(itemName,productPrice,amount);      
           }
